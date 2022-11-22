@@ -1,0 +1,6 @@
+Vs_Qt/NetDiskSystem/x64/
+Vs_Qt/NetDiskSystem/.vs/
+
+Vs_Qt/NetDiskSystem/NetDiskSystem/x64/
+Vs_Qt/NetDiskSystem/NetDiskSystem/*.vcxproj.filters
+Vs_Qt/NetDiskSystem/NetDiskSystem/*.vcxproj.user

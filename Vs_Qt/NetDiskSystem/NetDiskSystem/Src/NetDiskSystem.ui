@@ -1,0 +1,28 @@
+<UI version="4.0" >
+ <class>NetDiskSystemClass</class>
+ <widget class="QMainWindow" name="NetDiskSystemClass" >
+  <property name="objectName" >
+   <string notr="true">NetDiskSystemClass</string>
+  </property>
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>NetDiskSystem</string>
+  </property>  <widget class="QMenuBar" name="menuBar" />
+  <widget class="QToolBar" name="mainToolBar" />
+  <widget class="QWidget" name="centralWidget" />
+  <widget class="QStatusBar" name="statusBar" />
+ </widget>
+ <layoutDefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <resources>
+   <include location="NetDiskSystem.qrc"/>
+ </resources>
+ <connections/>
+</UI>
