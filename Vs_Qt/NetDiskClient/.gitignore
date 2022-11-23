@@ -1,0 +1,6 @@
+x64/
+.vs/
+
+NetDiskClient/x64/
+NetDiskClient/*.vcxproj.filters
+NetDiskClient/*.vcxproj.user
