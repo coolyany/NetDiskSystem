@@ -11,6 +11,9 @@ public:
 //槽函数
 public:
 	void ReadMsg();
+
+signals:
+	void disConnectedSign(qintptr socketDescriptor);
 private:
 
 };

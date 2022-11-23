@@ -10,6 +10,7 @@ class MyTcpServer : public QTcpServer
 public:
 	static MyTcpServer* getInstance();
 
+	void disConnectOneSocket(qintptr socketDescriptor);
 protected:
 	void incomingConnection(qintptr socketDescriptor) override;
 

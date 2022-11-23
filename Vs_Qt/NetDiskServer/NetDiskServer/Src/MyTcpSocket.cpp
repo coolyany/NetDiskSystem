@@ -4,6 +4,10 @@ MyTcpSocket::MyTcpSocket(QObject * parent)
 	:QTcpSocket(parent)
 {
 	connect(this, &MyTcpSocket::readyRead, this, &MyTcpSocket::ReadMsg);
+	connect(this, &MyTcpSocket::disconnected, [this]() {
+		qDebug() << this->socketDescriptor() << "断开连接";
+		emit disConnectedSign(this->socketDescriptor());
+	});
 }
 
 void MyTcpSocket::ReadMsg()
