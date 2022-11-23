@@ -1,6 +1,20 @@
 Vs_Qt/NetDiskSystem/x64/
 Vs_Qt/NetDiskSystem/.vs/
 
+Vs_Qt/NetDiskServer/x64/
+Vs_Qt/NetDiskServer/.vs/
+
+Vs_Qt/NetDiskClient/x64/
+Vs_Qt/NetDiskClient/.vs/
+
 Vs_Qt/NetDiskSystem/NetDiskSystem/x64/
 Vs_Qt/NetDiskSystem/NetDiskSystem/*.vcxproj.filters
 Vs_Qt/NetDiskSystem/NetDiskSystem/*.vcxproj.user
+
+Vs_Qt/NetDiskClient/NetDiskClient/x64/
+Vs_Qt/NetDiskClient/NetDiskClient/*.vcxproj.filters
+Vs_Qt/NetDiskClient/NetDiskClient/*.vcxproj.user
+
+Vs_Qt/NetDiskServer/NetDiskServer/x64/
+Vs_Qt/NetDiskServer/NetDiskServer/*.vcxproj.filters
+Vs_Qt/NetDiskServer/NetDiskServer/*.vcxproj.user

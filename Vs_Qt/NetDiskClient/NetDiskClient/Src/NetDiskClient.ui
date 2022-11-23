@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NetDiskClientClass</class>
+ <widget class="QWidget" name="NetDiskClientClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>615</width>
+    <height>393</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>NetDiskClient</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QTextEdit" name="textEdit">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>26</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="font">
+          <font>
+           <pointsize>23</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>发送</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="../NetDiskClient.qrc"/>
+ </resources>
+ <connections/>
+</ui>
