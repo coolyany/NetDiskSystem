@@ -4,5 +4,3 @@ x64/
 NetDiskServer/x64/
 NetDiskServer/*.vcxproj.filters
 NetDiskServer/*.vcxproj.user
-
-NetDiskServer/*.db
