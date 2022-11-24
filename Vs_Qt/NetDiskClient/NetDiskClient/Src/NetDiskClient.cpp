@@ -63,6 +63,7 @@ void NetDiskClient::initConnect()
 	//	pdu = NULL;
 	//});
 	connect(ui.pushButton_2, &QPushButton::clicked, this, &NetDiskClient::onRegisterButton);//注册
+	connect(ui.pushButton, &QPushButton::clicked, this, &NetDiskClient::onLoginButton);//注册
 
 }
 
@@ -75,6 +76,19 @@ void NetDiskClient::handleRegisterRes(PDU* pdu)
 	else if(strcmp(pdu->caData, REGISTER_FAILED) == 0)
 	{
 		QMessageBox::warning(this, "注册", REGISTER_FAILED);
+
+	}
+}
+
+void NetDiskClient::handleLoginRes(PDU * pdu)
+{
+	if (strcmp(pdu->caData, LOGIN_OK) == 0)
+	{
+		QMessageBox::information(this, "登录", LOGIN_OK);
+	}
+	else if (strcmp(pdu->caData, LOGIN_FAILED) == 0)
+	{
+		QMessageBox::warning(this, "登录", LOGIN_FAILED);
 
 	}
 }
@@ -105,6 +119,9 @@ void NetDiskClient::onReadyRead()
 	case ENUM_MSG_TYPE_REGIST_RESPONSE:
 		handleRegisterRes(pdu);
 		break;
+	case ENUM_MSG_TYPE_LOGIN_RESPONSE:
+		handleLoginRes(pdu);
+		break;
 	default:
 		break;
 	}
@@ -128,6 +145,29 @@ void NetDiskClient::onRegisterButton()
 	{
 		PDU* pdu = getPDU(0);
 		pdu->MsgType = ENUM_MSG_TYPE_REGIST_REQUEST;
+		memcpy(pdu->caData, username.toStdString().c_str(), 32);//拷贝信息
+		memcpy(pdu->caData + 32, password.toStdString().c_str(), 32);//拷贝信息
+
+		m_tcpSkt->write((char *)pdu, pdu->PDULen);//发送数据
+		//清理内存
+		free(pdu);
+		pdu = NULL;
+	}
+}
+
+void NetDiskClient::onLoginButton()
+{
+	//获取输入数据
+	QString username = ui.lineEdit->text();
+	QString password = ui.lineEdit_2->text();
+	if (username.isEmpty() || password.isEmpty())
+	{
+		QMessageBox::critical(this, "注册", "注册失败，用户名或密码为空");
+	}
+	else
+	{
+		PDU* pdu = getPDU(0);
+		pdu->MsgType = ENUM_MSG_TYPE_LOGIN_REQUEST;
 		memcpy(pdu->caData, username.toStdString().c_str(), 32);//拷贝信息
 		memcpy(pdu->caData + 32, password.toStdString().c_str(), 32);//拷贝信息
 

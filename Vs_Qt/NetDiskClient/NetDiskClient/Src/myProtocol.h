@@ -1,4 +1,5 @@
 ﻿#pragma once
+/* 自定义通信协议 */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,13 +7,18 @@
 
 typedef unsigned int uint;
 
-#define REGISTER_OK		"register ok"
-#define REGISTER_FAILED		"register failed"
+#define REGISTER_OK			"register ok"
+#define REGISTER_FAILED		"register failed, name is existed"
+#define LOGIN_OK			"login ok"
+#define LOGIN_FAILED		"login failed, username or password is error. or the user has logged in"
 
 enum ENUM_MSG_TYPE {
 	ENUM_MSG_TYPE_MIN = 0,
+
 	ENUM_MSG_TYPE_REGIST_REQUEST,	//注册请求
 	ENUM_MSG_TYPE_REGIST_RESPONSE,  //注册回复
+	ENUM_MSG_TYPE_LOGIN_REQUEST,  //登录请求
+	ENUM_MSG_TYPE_LOGIN_RESPONSE,  //登录回复
 
 	ENUM_MSG_TYPE_MAX = 0x00ffffff
 };
