@@ -45,35 +45,6 @@ bool OperateDB::UserRegister(const char* username, const char* password)
 
 }
 
-bool OperateDB::UserLogin(const char * username, const char * password)
-{
-	if (username == NULL || password == NULL)
-	{
-		return false;
-	}
-
-	char query_userinfo_sql[128] = { '\0' };
-	sprintf(query_userinfo_sql, "SELECT * FROM userInfo WHERE name='%s' and password='%s' and online=0", username, password);
-
-	printf("sql query :: %s\n", query_userinfo_sql);
-
-	QSqlQuery sql_query;
-	sql_query.exec(query_userinfo_sql);
-
-	//移动到查询结果的下一条记录
-	if (sql_query.next())
-	{
-		char update_userinfo_sql[128] = { '\0' };
-		sprintf(update_userinfo_sql, "UPDATE userInfo SET online=1 WHERE name='%s' and password='%s'", username, password);
-
-		return sql_query.exec(update_userinfo_sql);
-	}
-	else
-	{
-		return false;
-	}
-}
-
 bool OperateDB::connectSql(const QString & dbName)
 {
 	m_db.setHostName("localhost");//本地数据库

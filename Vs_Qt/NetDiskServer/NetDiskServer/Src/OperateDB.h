@@ -12,7 +12,7 @@ public:
 	static OperateDB* getInstance(); // 公用获取引用，实现单例模式
 
 	bool UserRegister(const char* username, const char* password);
-	bool UserLogin(const char* username, const char* password);
+
 private:
 	explicit OperateDB(QObject* parent = Q_NULLPTR);
 	void init();//初始化

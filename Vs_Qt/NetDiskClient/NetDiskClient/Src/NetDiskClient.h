@@ -18,8 +18,7 @@ public:
 	void loadIniConfig();
 	void initConnect();
 
-	void handleRegisterRes(PDU* pdu);//处理服务端注册回应
-	void handleLoginRes(PDU* pdu);//处理服务端登录回应
+	void handleRegisterRes(PDU* pdu);//处理服务端回应
 //槽函数
 public:
 	void buildConnected();
@@ -27,7 +26,6 @@ public:
 	void onReadyRead();
 
 	void onRegisterButton();//注册
-	void onLoginButton();//登录
 private:
     Ui::NetDiskClientClass ui;
 

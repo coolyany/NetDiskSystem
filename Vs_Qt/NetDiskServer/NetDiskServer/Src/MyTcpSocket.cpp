@@ -25,8 +25,8 @@ void MyTcpSocket::handleRegisterReq(PDU* pdu)
 
 	bool re = OperateDB::getInstance()->UserRegister(name, pwd);
 
-	PDU* res_pdu = getPDU(0);//分配内存
-	res_pdu->MsgType = ENUM_MSG_TYPE_REGIST_RESPONSE;//返回注册回应
+	PDU* res_pdu = getPDU(0);
+	res_pdu->MsgType = ENUM_MSG_TYPE_REGIST_RESPONSE;
 	//数据库操作成功
 	if (re)
 	{
@@ -38,39 +38,6 @@ void MyTcpSocket::handleRegisterReq(PDU* pdu)
 	{
 		//memcpy(res_pdu->caData, REGISTER_FAILED, 64);
 		strcpy(res_pdu->caData, REGISTER_FAILED);
-
-	}
-	this->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
-
-
-	free(res_pdu);
-	res_pdu = NULL;
-}
-
-void MyTcpSocket::handleLoginReq(PDU * pdu)
-{
-	char name[32] = { '\0' };
-	char pwd[32] = { '\0' };
-	strncpy(name, pdu->caData, 32);
-	strncpy(pwd, pdu->caData + 32, 32);
-
-	qDebug() << "name :: " << name << " pwd :: " << pwd;
-
-	//bool re = OperateDB::getInstance()->UserRegister(name, pwd);
-	bool re = OperateDB::getInstance()->UserLogin(name, pwd);
-
-
-	PDU* res_pdu = getPDU(0);//分配内存
-	res_pdu->MsgType = ENUM_MSG_TYPE_LOGIN_RESPONSE;//返回登录回应
-	//数据库操作成功
-	if (re)
-	{
-		strcpy(res_pdu->caData, LOGIN_OK);
-	}
-	//失败
-	else
-	{
-		strcpy(res_pdu->caData, LOGIN_FAILED);
 
 	}
 	this->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
@@ -98,9 +65,6 @@ void MyTcpSocket::ReadMsg()
 	switch (pdu->MsgType) {
 	case ENUM_MSG_TYPE_REGIST_REQUEST:
 		handleRegisterReq(pdu);
-		break;
-	case ENUM_MSG_TYPE_LOGIN_REQUEST:
-		handleLoginReq(pdu);
 		break;
 	default:
 		break;
