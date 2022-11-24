@@ -6,6 +6,17 @@
 
 typedef unsigned int uint;
 
+#define REGISTER_OK		"register ok"
+#define REGISTER_FAILED		"register failed"
+
+enum ENUM_MSG_TYPE {
+	ENUM_MSG_TYPE_MIN = 0,
+	ENUM_MSG_TYPE_REGIST_REQUEST,	//注册请求
+	ENUM_MSG_TYPE_REGIST_RESPONSE,  //注册回复
+
+	ENUM_MSG_TYPE_MAX = 0x00ffffff
+};
+
 typedef struct protocol_data_unit{
 	uint PDULen;//整个PDU大小
 	uint MsgType;//信息类型

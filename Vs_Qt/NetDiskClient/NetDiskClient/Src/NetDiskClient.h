@@ -17,11 +17,15 @@ public:
 
 	void loadIniConfig();
 	void initConnect();
+
+	void handleRegisterRes(PDU* pdu);//处理服务端回应
 //槽函数
 public:
 	void buildConnected();
 	void occurError(QAbstractSocket::SocketError socketError);
-	void readyRead();
+	void onReadyRead();
+
+	void onRegisterButton();//注册
 private:
     Ui::NetDiskClientClass ui;
 

@@ -32,7 +32,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>5.14.2_msvc2017_64</QtInstall>
-    <QtModules>core;gui;network;widgets</QtModules>
+    <QtModules>core;gui;network;sql;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\myProtocol.cpp" />
+    <ClCompile Include="Src\OperateDB.cpp" />
     <ClCompile Include="Src\MyTcpServer.cpp" />
     <ClCompile Include="Src\MyTcpSocket.cpp" />
     <ClCompile Include="Src\QReadIni.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Src\myProtocol.h" />
     <QtMoc Include="Src\MyTcpSocket.h" />
     <QtMoc Include="Src\MyTcpServer.h" />
+    <QtMoc Include="Src\OperateDB.h" />
     <ClInclude Include="Src\QReadIni.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,27 +1,51 @@
-﻿#include "MySql.h"
+﻿#include "OperateDB.h"
 #include <QDebug>
 #include <QMessageBox>
 
-MySql::MySql(QObject* parent)
+OperateDB *OperateDB::instance = nullptr;
+
+OperateDB::OperateDB(QObject* parent)
 	: QObject(parent)
 {
 	// 连接数据库
 	m_db = QSqlDatabase::addDatabase("QSQLITE"); // 连接的数据库类型,这里选择sqlite
+	init();
 }
 
-MySql::~MySql()
+OperateDB::~OperateDB()
 {
 	m_db.close(); // 关闭数据库连接
 }
 
-MySql & MySql::getInstance()
+OperateDB* OperateDB::getInstance()
 {
 	// TODO: 在此处插入 return 语句
-	static MySql instance;
+	//static OperateDB instance;
+	if (instance == NULL)
+	{
+		instance = new OperateDB();
+	}
 	return instance;
 }
 
-bool MySql::connectSql(const QString & dbName)
+bool OperateDB::UserRegister(const char* username, const char* password)
+{
+	if (username == NULL || password == NULL)
+	{
+		return false;
+	}
+
+	char insert_userinfo_sql[128] = { '\0' };
+	sprintf(insert_userinfo_sql, "INSERT INTO userInfo (name, password) VALUES ('%s','%s')", username, password);
+
+	printf("sql query :: %s\n", insert_userinfo_sql);
+
+	QSqlQuery sql_query;
+	return sql_query.exec(insert_userinfo_sql);
+
+}
+
+bool OperateDB::connectSql(const QString & dbName)
 {
 	m_db.setHostName("localhost");//本地数据库
 	m_db.setDatabaseName(dbName);
@@ -36,10 +60,10 @@ bool MySql::connectSql(const QString & dbName)
 	return true;
 }
 
-void MySql::init()
+void OperateDB::init()
 {
 	//如果打开成功
-	if (connectSql("netdisksystem.db"))
+	if (connectSql("netdisk.db"))
 	{
 		qDebug() << "open successful";
 
@@ -55,9 +79,9 @@ void MySql::init()
 			//创建用户信息表,id为主键（自动增长）
 			QString create_userinfo_sql = "CREATE TABLE userInfo("
 				"id INTEGER PRIMARY KEY AUTOINCREMENT,"
-				"name VARCHAR(30),"
-				"password VARCHAR(30)),"
-				"online INTEGER DEFAULT(0)";
+				"name VARCHAR(30) UNIQUE,"// 不能重名,唯一
+				"password VARCHAR(30),"
+				"online INTEGER DEFAULT(0))";
 			sql_query.prepare(create_userinfo_sql);
 			if (!sql_query.exec())
 			{
@@ -75,9 +99,9 @@ void MySql::init()
 		{
 			//创建用户信息表,id为主键（自动增长）
 			QString create_userFriendInfo_sql = "CREATE TABLE userFriendInfo("
-				"id INTEGER PRIMARY KEY AUTOINCREMENT,"
-				"friendId INTEGER),"
-				"PRIMARY KEY(id,friendId)";
+				"id INTEGER,"
+				"friendId INTEGER,"
+				"PRIMARY KEY(id,friendId))";
 			sql_query.prepare(create_userFriendInfo_sql);
 			if (!sql_query.exec())
 			{
@@ -93,8 +117,8 @@ void MySql::init()
 		re = sql_query.exec("select * from userInfo");
 		while (sql_query.next())
 		{
-			QString data = QString("%1, %2, %3").arg(sql_query.value(0).toString()).arg(sql_query.value(1).toString())
-				.arg(sql_query.value(2).toString());
+			QString data = QString("%1, %2, %3, %4").arg(sql_query.value(0).toString()).arg(sql_query.value(1).toString())
+				.arg(sql_query.value(2).toString()).arg(sql_query.value(3).toString());
 			qDebug() << data;
 		}
 
