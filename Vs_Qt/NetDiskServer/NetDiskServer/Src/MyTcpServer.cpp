@@ -17,17 +17,18 @@ void MyTcpServer::disConnectOneSocket(qintptr socketDescriptor)
 {
 	int i = 0;
 	for (auto item : m_tcpSockets) {
-		qDebug() << "客户端 " << item->socketDescriptor() << " 退出连接";
 		if (item->socketDescriptor() == socketDescriptor)
 		{
+			qDebug() << "客户端 " << item->getClientName() << " 退出连接";
+
 			m_tcpSockets.removeAt(i);
 			item = nullptr;
-
-			return;
+			break;
 		}
-		qDebug() << "socket sizes :: " << m_tcpSockets.size();
 		i++;
 	}
+	qDebug() << "logouted socket number :: " << m_tcpSockets.size();
+
 }
 
 void MyTcpServer::incomingConnection(qintptr socketDescriptor)

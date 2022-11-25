@@ -14,6 +14,7 @@ public:
 	void handleRegisterReq(PDU* pdu);//处理注册请求
 	void handleLoginReq(PDU* pdu);//处理登录请求
 
+	inline QString getClientName() { return m_username; }
 //槽函数
 public:
 	void ReadMsg();
@@ -21,4 +22,5 @@ public:
 signals:
 	void disConnectedSign(qintptr socketDescriptor);
 private:
+	QString m_username;
 };

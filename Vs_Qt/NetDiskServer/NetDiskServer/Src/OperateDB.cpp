@@ -74,6 +74,22 @@ bool OperateDB::UserLogin(const char * username, const char * password)
 	}
 }
 
+void OperateDB::setOffline(const char * name)
+{
+	if (!name) {
+		printf("name is NULL\n");
+		return;
+	}
+	//登录状态设置为0，下线状态
+	char offline_userinfo_sql[128] = { '\0' };
+	sprintf(offline_userinfo_sql, "UPDATE userInfo SET online=0 WHERE name='%s'", name);
+
+	printf("sql query :: %s\n", offline_userinfo_sql);
+
+	QSqlQuery query;
+	query.exec(offline_userinfo_sql);
+}
+
 bool OperateDB::connectSql(const QString & dbName)
 {
 	m_db.setHostName("localhost");//本地数据库

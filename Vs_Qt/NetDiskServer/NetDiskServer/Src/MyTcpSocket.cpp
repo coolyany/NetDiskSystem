@@ -10,6 +10,7 @@ MyTcpSocket::MyTcpSocket(QObject * parent)
 	connect(this, &MyTcpSocket::readyRead, this, &MyTcpSocket::ReadMsg);
 	connect(this, &MyTcpSocket::disconnected, [this]() {
 		qDebug() << this->socketDescriptor() << "断开连接";
+		OperateDB::getInstance()->setOffline(m_username.toStdString().c_str());
 		emit disConnectedSign(this->socketDescriptor());
 	});
 }
@@ -55,7 +56,7 @@ void MyTcpSocket::handleLoginReq(PDU * pdu)
 	strncpy(pwd, pdu->caData + 32, 32);
 
 	qDebug() << "name :: " << name << " pwd :: " << pwd;
-
+	m_username = name;
 	//bool re = OperateDB::getInstance()->UserRegister(name, pwd);
 	bool re = OperateDB::getInstance()->UserLogin(name, pwd);
 

@@ -13,6 +13,8 @@ public:
 
 	bool UserRegister(const char* username, const char* password);
 	bool UserLogin(const char* username, const char* password);
+
+	void setOffline(const char* name);
 private:
 	explicit OperateDB(QObject* parent = Q_NULLPTR);
 	void init();//初始化

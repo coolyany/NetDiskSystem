@@ -4,7 +4,7 @@
 NetDiskServer::NetDiskServer(QWidget *parent)
     : QWidget(parent)
 {
-    ui.setupUi(this);
+    //ui.setupUi(this);
 	loadIniConfig();
 	initConnect();
 }

@@ -89,7 +89,6 @@ void NetDiskClient::handleLoginRes(PDU * pdu)
 	else if (strcmp(pdu->caData, LOGIN_FAILED) == 0)
 	{
 		QMessageBox::warning(this, "登录", LOGIN_FAILED);
-
 	}
 }
 
@@ -162,7 +161,7 @@ void NetDiskClient::onLoginButton()
 	QString password = ui.lineEdit_2->text();
 	if (username.isEmpty() || password.isEmpty())
 	{
-		QMessageBox::critical(this, "注册", "注册失败，用户名或密码为空");
+		QMessageBox::critical(this, "登录", "登录失败，用户名或密码错误，或改用户处于在线状态");
 	}
 	else
 	{

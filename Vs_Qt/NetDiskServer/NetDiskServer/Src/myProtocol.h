@@ -10,8 +10,7 @@ typedef unsigned int uint;
 #define REGISTER_OK			"register ok"
 #define REGISTER_FAILED		"register failed, name is existed"
 #define LOGIN_OK			"login ok"
-#define LOGIN_FAILED		"login failed, username or password is error. or the user has logged in"
-
+#define LOGIN_FAILED		"login failed"
 
 
 enum ENUM_MSG_TYPE {
