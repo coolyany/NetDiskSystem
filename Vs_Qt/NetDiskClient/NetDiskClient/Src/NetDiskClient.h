@@ -6,6 +6,7 @@
 #include "ui_NetDiskClient.h"
 #include "QReadIni.h"
 #include "myProtocol.h"
+#include "ClientWidget.h"
 
 class NetDiskClient : public QWidget
 {
@@ -37,4 +38,5 @@ private:
 	IniConfig m_iCfg;
 
 	QTcpSocket* m_tcpSkt = nullptr;
+	//ClientWidget* m_clienWdt = nullptr;
 };

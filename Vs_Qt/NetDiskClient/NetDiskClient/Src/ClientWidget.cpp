@@ -9,6 +9,13 @@ ClientWidget::ClientWidget(QWidget * parent)
 
 }
 
+ClientWidget & ClientWidget::getInstance()
+{
+	// TODO: 在此处插入 return 语句
+	static ClientWidget instance;
+	return instance;
+}
+
 void ClientWidget::initLayout()
 {
 	m_setWdt = new QListWidget(this);
@@ -28,6 +35,8 @@ void ClientWidget::initLayout()
 
 
 	this->setLayout(hLayout);
+	this->setMinimumHeight(500);
+	this->setMinimumWidth(400);
 }
 
 void ClientWidget::initConnect()

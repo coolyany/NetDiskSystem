@@ -11,11 +11,14 @@
 class ClientWidget : public QWidget
 {
 public:
-	ClientWidget(QWidget* parent = Q_NULLPTR);
+	static ClientWidget& getInstance();
 
 	void initLayout();
 	void initConnect();
 private:
+	ClientWidget(QWidget* parent = Q_NULLPTR);
+
+
 	QListWidget *m_setWdt = nullptr;
 
 	UserWidget* m_userWdt = nullptr;

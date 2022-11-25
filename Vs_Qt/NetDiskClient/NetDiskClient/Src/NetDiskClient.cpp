@@ -85,6 +85,10 @@ void NetDiskClient::handleLoginRes(PDU * pdu)
 	if (strcmp(pdu->caData, LOGIN_OK) == 0)
 	{
 		QMessageBox::information(this, "登录", LOGIN_OK);
+		//跳转用户界面
+		ClientWidget::getInstance().show();
+		//隐藏登录界面
+		this->hide();
 	}
 	else if (strcmp(pdu->caData, LOGIN_FAILED) == 0)
 	{
