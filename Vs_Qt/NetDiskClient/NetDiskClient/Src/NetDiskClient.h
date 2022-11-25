@@ -13,14 +13,14 @@ class NetDiskClient : public QWidget
     Q_OBJECT
 
 public:
-    NetDiskClient(QWidget *parent = Q_NULLPTR);
 	~NetDiskClient();
 
-	void loadIniConfig();
-	void initConnect();
+	static NetDiskClient& getInstance();
+	inline QTcpSocket* getTcpSocket() { return m_tcpSkt; }
 
 	void handleRegisterRes(PDU* pdu);//处理服务端注册回应
 	void handleLoginRes(PDU* pdu);//处理服务端登录回应
+	void handleOnlineUserRes(PDU* pdu);//处理服务端在下用户回应
 //槽函数
 public:
 	void buildConnected();
@@ -29,6 +29,11 @@ public:
 
 	void onRegisterButton();//注册
 	void onLoginButton();//登录
+
+private:
+	NetDiskClient(QWidget *parent = Q_NULLPTR);
+	void loadIniConfig();
+	void initConnect();
 private:
     Ui::NetDiskClientClass ui;
 

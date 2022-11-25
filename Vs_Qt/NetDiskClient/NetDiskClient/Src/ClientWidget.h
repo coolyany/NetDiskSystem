@@ -15,6 +15,9 @@ public:
 
 	void initLayout();
 	void initConnect();
+
+public:
+	void setOnlineUser(PDU* pdu);
 private:
 	ClientWidget(QWidget* parent = Q_NULLPTR);
 

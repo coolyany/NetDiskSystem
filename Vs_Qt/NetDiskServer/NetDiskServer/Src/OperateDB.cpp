@@ -74,6 +74,21 @@ bool OperateDB::UserLogin(const char * username, const char * password)
 	}
 }
 
+QStringList OperateDB::GetUserOnline()
+{
+	char online_userinfo_sql[128] = { '\0' };
+	sprintf(online_userinfo_sql, "SELECT name FROM userInfo WHERE online=1");
+
+	QSqlQuery sql_query;
+	sql_query.exec(online_userinfo_sql);
+	QStringList userNames;
+	while (sql_query.next()) {
+		userNames.append(sql_query.value(0).toString());
+	}
+
+	return userNames;
+}
+
 void OperateDB::setOffline(const char * name)
 {
 	if (!name) {

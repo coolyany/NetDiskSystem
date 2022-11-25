@@ -67,6 +67,13 @@ void NetDiskClient::initConnect()
 
 }
 
+NetDiskClient & NetDiskClient::getInstance()
+{
+	// TODO: 在此处插入 return 语句
+	static NetDiskClient instance;
+	return instance;
+}
+
 void NetDiskClient::handleRegisterRes(PDU* pdu)
 {
 	if (strcmp(pdu->caData, REGISTER_OK) == 0)
@@ -92,8 +99,13 @@ void NetDiskClient::handleLoginRes(PDU * pdu)
 	}
 	else if (strcmp(pdu->caData, LOGIN_FAILED) == 0)
 	{
-		QMessageBox::warning(this, "登录", LOGIN_FAILED);
+		QMessageBox::warning(this, "登录", LOGIN_FAILED); 
 	}
+}
+
+void NetDiskClient::handleOnlineUserRes(PDU * pdu)
+{
+	ClientWidget::getInstance().setOnlineUser(pdu);
 }
 
 void NetDiskClient::buildConnected()
@@ -124,6 +136,9 @@ void NetDiskClient::onReadyRead()
 		break;
 	case ENUM_MSG_TYPE_LOGIN_RESPONSE:
 		handleLoginRes(pdu);
+		break;
+	case ENUM_MSG_TYPE_USER_ONLINE_RESPONSE:
+		handleOnlineUserRes(pdu);
 		break;
 	default:
 		break;

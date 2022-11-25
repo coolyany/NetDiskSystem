@@ -81,6 +81,29 @@ void MyTcpSocket::handleLoginReq(PDU * pdu)
 	res_pdu = NULL;
 }
 
+void MyTcpSocket::handleUserOnlineReq()
+{
+	QStringList inline_users = OperateDB::getInstance()->GetUserOnline();
+
+	PDU* res_pdu = getPDU(inline_users.size() * 32);//分配信息的内存，每个用户占32个字节
+	res_pdu->MsgType = ENUM_MSG_TYPE_USER_ONLINE_RESPONSE;//返回用户在线回应
+
+	//回应数据
+	for (size_t i = 0; i < inline_users.size(); i++)
+	{
+		//转换用户名->const char*
+		//const char* name = inline_users[i].toStdString().c_str();
+		QString name = inline_users.at(i);
+		printf("length :: %d\n", name.size() + 1);
+		//拷贝,内存地址每次移32位
+		memcpy((char*)(res_pdu->caMsg) + i*32, name.toStdString().c_str(), name.size() + 1);
+	}
+
+	this->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
+	free(res_pdu);
+	res_pdu = NULL;
+}
+
 void MyTcpSocket::ReadMsg()
 {
 	qDebug() << "read size :: " << this->bytesAvailable();
@@ -102,6 +125,9 @@ void MyTcpSocket::ReadMsg()
 		break;
 	case ENUM_MSG_TYPE_LOGIN_REQUEST:
 		handleLoginReq(pdu);
+		break;
+	case ENUM_MSG_TYPE_USER_ONLINE_RESPONSE:
+		handleUserOnlineReq();
 		break;
 	default:
 		break;

@@ -13,6 +13,7 @@ public:
 public:
 	void handleRegisterReq(PDU* pdu);//处理注册请求
 	void handleLoginReq(PDU* pdu);//处理登录请求
+	void handleUserOnlineReq();//处理用户在线请求
 
 	inline QString getClientName() { return m_username; }
 //槽函数

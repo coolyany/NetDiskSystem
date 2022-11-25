@@ -3,6 +3,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QStringList>
 
 class OperateDB : public QObject
 {
@@ -13,6 +14,7 @@ public:
 
 	bool UserRegister(const char* username, const char* password);
 	bool UserLogin(const char* username, const char* password);
+	QStringList GetUserOnline();
 
 	void setOffline(const char* name);
 private:

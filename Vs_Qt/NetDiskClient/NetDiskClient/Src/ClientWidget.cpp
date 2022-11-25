@@ -43,3 +43,12 @@ void ClientWidget::initConnect()
 {
 	connect(m_setWdt, &QListWidget::currentRowChanged, m_stcWdt, &QStackedWidget::setCurrentIndex);
 }
+
+void ClientWidget::setOnlineUser(PDU * pdu)
+{
+	if (!pdu)
+	{
+		return;
+	}
+	m_userWdt->setOnlineUserList(pdu);
+}
