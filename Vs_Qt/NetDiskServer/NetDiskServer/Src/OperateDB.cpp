@@ -123,6 +123,29 @@ int OperateDB::SearchUser(const char * name)
 	}
 }
 
+int OperateDB::AddUser(const char * friendName, const char * localName)
+{
+	if (!friendName | !localName) {
+		printf("firendName or localName is NULL\n");
+		return -1;
+	}
+	char add_userFriendInfo_sql[256] = { '\0' };
+	sprintf(add_userFriendInfo_sql, "select * from userFriendInfo "
+		"where id=(select id from userInfo where name=%s)"
+		"and friendId=(select id from userInfo where name=%s)"
+		"or where id=(select id from userInfo where name=%s)"
+		"and friendId=(select id from userInfo where name=%s)", friendName, localName, localName, friendName);
+
+	QSqlQuery query;
+	query.exec(add_userFriendInfo_sql);
+	if (query.next()) {
+		qDebug() << "add users value ::	" << query.value(0).toString();
+	}
+
+
+	return 0;
+}
+
 void OperateDB::setOffline(const char * name)
 {
 	if (!name) {

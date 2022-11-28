@@ -140,6 +140,20 @@ void MyTcpSocket::handleSearchUserReq(PDU* pdu)
 	res_pdu = NULL;
 }
 
+void MyTcpSocket::handleAddUserReq(PDU * pdu)
+{
+	char friendName[32] = { '\0' };
+	char localName[32] = { '\0' };
+
+	strncpy(friendName, pdu->caData, 32);
+	strncpy(localName, pdu->caData + 32, 32);
+
+	qDebug() << "add friend name is :: " << friendName;
+	qDebug() << "add local name is :: " << localName;
+
+	int re = OperateDB::getInstance()->AddUser(friendName, localName);
+}
+
 void MyTcpSocket::ReadMsg()
 {
 	qDebug() << "read size :: " << this->bytesAvailable();
@@ -167,6 +181,9 @@ void MyTcpSocket::ReadMsg()
 		break;
 	case ENUM_MSG_TYPE_SEARCH_USER_REQUEST:
 		handleSearchUserReq(pdu);
+		break;
+	case ENUM_MSG_TYPE_ADD_USER_REQUEST:
+		handleAddUserReq(pdu);
 		break;
 	default:
 		break;

@@ -91,9 +91,11 @@ void NetDiskClient::handleLoginRes(PDU * pdu)
 	if (strcmp(pdu->caData, LOGIN_OK) == 0)
 	{
 		QMessageBox::information(this, "登录", LOGIN_OK);
+
 		//跳转用户界面
 		ClientWidget::getInstance().show();
-		ClientWidget::getInstance().setWindowTittle(m_logname);
+		ClientWidget::getInstance().setWindowTitle(m_logname);
+
 		//隐藏登录界面
 		this->hide();
 	}
@@ -169,7 +171,6 @@ void NetDiskClient::onRegisterButton()
 	}
 	else
 	{
-		m_logname = username;
 		PDU* pdu = getPDU(0);
 		pdu->MsgType = ENUM_MSG_TYPE_REGIST_REQUEST;
 		memcpy(pdu->caData, username.toStdString().c_str(), 32);//拷贝信息
@@ -193,6 +194,7 @@ void NetDiskClient::onLoginButton()
 	}
 	else
 	{
+		m_logname = username;
 		PDU* pdu = getPDU(0);
 		pdu->MsgType = ENUM_MSG_TYPE_LOGIN_REQUEST;
 		memcpy(pdu->caData, username.toStdString().c_str(), username.toStdString().size());//拷贝信息

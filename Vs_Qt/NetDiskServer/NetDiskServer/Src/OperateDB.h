@@ -16,6 +16,7 @@ public:
 	bool UserLogin(const char* username, const char* password);
 	QStringList GetUserOnline();
 	int SearchUser(const char* name);//-1代表不存在，0代表存在但不在线，1代表存在且在线
+	int AddUser(const char* friendName, const char* localName);
 
 	void setOffline(const char* name);
 private:

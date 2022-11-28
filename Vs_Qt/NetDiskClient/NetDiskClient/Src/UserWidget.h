@@ -20,14 +20,15 @@ public:
 
 	void setOnlineUserList(PDU* pdu);
 	void setSearchUserResult(PDU* pdu);
+	inline void setLocalName(QString name) { m_localName = name; }
 public:
 	void onShowOnlineList();
 	void onShowSearchUser();
-	void onClickedUsersListItem(QListWidgetItem *item);
-	void onClickAddFrien();//添加好友
+	void onClickedUsersListItem(int currentRow);
+	void onClickAddFriend();//添加好友
 
 protected:
-	bool eventFilter(QObject* watched, QEvent* event) override;
+	//bool eventFilter(QObject* watched, QEvent* event) override;
 private:
 	QTextEdit* m_showMsgTE = nullptr;
 	QLineEdit* m_sendMsgLE = nullptr;
@@ -41,7 +42,8 @@ private:
 	QPushButton* m_privateChatPB = nullptr;
 	QPushButton* m_sendMsgPB = nullptr;
 
-	QListWidgetItem* m_curUserItem = nullptr;
+	//QListWidgetItem* m_curUserItem = nullptr;
 
-	QString m_inputName;
+	QString m_searchName;
+	QString m_localName;
 };

@@ -50,15 +50,15 @@ void UserWidget::initLayout()
 	this->setLayout(wdtLayout);
 
 	//安装事件过滤器
-	m_userList->installEventFilter(this);
+	//m_userList->installEventFilter(this);
 }
 
 void UserWidget::initConnect()
 {
 	connect(m_showOnlineListPB, &QPushButton::clicked, this, &UserWidget::onShowOnlineList);
 	connect(m_findUserPB, &QPushButton::clicked, this, &UserWidget::onShowSearchUser);
-	//connect(m_userList, &QListWidget::itemPressed, this, &UserWidget::onClickedUsersListItem);
-	connect(m_addFriendPB, &QPushButton::clicked, this, &UserWidget::onClickAddFrien);
+	connect(m_userList, &QListWidget::currentRowChanged, this, &UserWidget::onClickedUsersListItem);
+	connect(m_addFriendPB, &QPushButton::clicked, this, &UserWidget::onClickAddFriend);
 }
 
 void UserWidget::clearUserList()
@@ -88,12 +88,12 @@ void UserWidget::setSearchUserResult(PDU * pdu)
 	//搜索成功且在线
 	if (strcmp(pdu->caData, SEARCH_OK_ONLINE) == 0)
 	{
-		m_userList->addItem(QString("%1,在线").arg(m_inputName));
+		m_userList->addItem(QString("%1,在线").arg(m_searchName));
 	}
 	//搜索成功但没在线
 	else if (strcmp(pdu->caData, SEARCH_OK_OFFLINE) == 0)
 	{
-		m_userList->addItem(QString("%1,下线").arg(m_inputName));
+		m_userList->addItem(QString("%1,下线").arg(m_searchName));
 
 	}
 	//搜索无结果
@@ -121,7 +121,7 @@ void UserWidget::onShowSearchUser()
 	if (!name.isEmpty())
 	{
 		qDebug() << "input name :: " << name;
-		m_inputName = name;
+		m_searchName = name;
 		PDU* pdu = getPDU(0);
 		pdu->MsgType = ENUM_MSG_TYPE_SEARCH_USER_REQUEST;//搜索用户请求
 		memset(pdu->caData, 0, 64);
@@ -135,39 +135,81 @@ void UserWidget::onShowSearchUser()
 	
 }
 
-void UserWidget::onClickedUsersListItem(QListWidgetItem * item)
+void UserWidget::onClickedUsersListItem(int currentRow)
 {
-	qDebug() << "item is clicked ... ";
-	m_curUserItem = item;
+	qDebug() << "item is clicked ... " << currentRow;
+	//m_curUserItem = item;
+	//m_userList->setCurrentRow(currentRow);
+
 }
 
-void UserWidget::onClickAddFrien()
+void UserWidget::onClickAddFriend()
 {
-	if (m_curUserItem->isSelected())
+	/*int row = m_userList->currentRow();
+	qDebug() << "current item index :: " << row;
+	qDebug() << "current item :: " << m_userList->currentItem();*/
+	/*if (row < 0)
 	{
-		qDebug() << "add friend";
+		QMessageBox::warning(this, "添加好友", "请先选择好友。");
+		return;
+	}*/
+	QListWidgetItem* curItem = m_userList->currentItem();
+	if (!curItem)
+	{
+		QMessageBox::warning(this, "添加好友", "请先选择好友。");
+		return;
 	}
-}
+	QString friendName = curItem->text();
+	int findIndex = friendName.indexOf(',');
+	//截取字符串
+	if (findIndex > 0)
+	{
+		friendName = friendName.left(findIndex);
+	}
 
-bool UserWidget::eventFilter(QObject * watched, QEvent * event)
-{
-	if (watched == m_userList)
+	qDebug() << "current item index :: " << friendName;
+	//QString friendName = curItem->text();
+	if (m_localName == friendName)
 	{
-		qDebug() << " eventFilter ...";
-		if (QEvent::MouseButtonPress == event->type())
-		{
-			qDebug() << "Clicked ...";
-			
-			m_curUserItem = m_userList->itemAt(QCursor::pos());
-			if (m_curUserItem)
-			{
-				qDebug() << "Clicked Not Null";
-			}
-			else
-			{
-				qDebug() << "Clicked NULL";
-			}
-		}
+		QMessageBox::warning(this, "添加好友", "不能添加自己为好友");
+		return;
 	}
-	return QWidget::eventFilter(watched, event);
+
+	PDU* pdu = getPDU(0);
+	pdu->MsgType = ENUM_MSG_TYPE_ADD_USER_REQUEST;//添加用户请求
+	memset(pdu->caData, 0, 64);
+	//strcpy(pdu->caData, friendName.toStdString().c_str());
+	memcpy(pdu->caData, friendName.toStdString().c_str(), friendName.toStdString().size());//添加的好友名字
+	memcpy(pdu->caData + 32, m_localName.toStdString().c_str(), m_localName.toStdString().size());//登录的客户端名字
+
+
+	NetDiskClient::getInstance().getTcpSocket()->write((char *)pdu, pdu->PDULen);//发送数据
+	//清理内存
+	free(pdu);
+	pdu = NULL;
+
+	
 }
+//
+//bool UserWidget::eventFilter(QObject * watched, QEvent * event)
+//{
+//	if (watched == m_userList)
+//	{
+//		qDebug() << " eventFilter ...";
+//		if (QEvent::MouseButtonPress == event->type())
+//		{
+//			qDebug() << "Clicked ...";
+//			
+//			m_curUserItem = m_userList->itemAt(QCursor::pos());
+//			if (m_curUserItem)
+//			{
+//				qDebug() << "Clicked Not Null";
+//			}
+//			else
+//			{
+//				qDebug() << "Clicked NULL";
+//			}
+//		}
+//	}
+//	return QWidget::eventFilter(watched, event);
+//}

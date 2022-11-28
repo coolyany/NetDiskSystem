@@ -4,6 +4,7 @@
 #include <QListWidget>
 #include <QHBoxLayout>
 #include <QStackedWidget>
+#include <QStatusBar>
 
 #include "UserWidget.h"
 #include "BookWidget.h"
@@ -17,7 +18,7 @@ public:
 
 	void initLayout();
 	void initConnect();
-	void setWindowTittle(QString name);
+	void setWindowTitle(QString name);
 
 public:
 	void setOnlineUser(PDU* pdu);
@@ -30,4 +31,5 @@ private:
 	UserWidget* m_userWdt = nullptr;
 	BookWidget* m_bookWdt = nullptr;
 	QStackedWidget* m_stcWdt = nullptr;
+	QStatusBar* m_statusBar = nullptr;
 };
