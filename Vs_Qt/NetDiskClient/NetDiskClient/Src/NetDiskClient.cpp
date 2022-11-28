@@ -64,7 +64,6 @@ void NetDiskClient::initConnect()
 	//});
 	connect(ui.pushButton_2, &QPushButton::clicked, this, &NetDiskClient::onRegisterButton);//注册
 	connect(ui.pushButton, &QPushButton::clicked, this, &NetDiskClient::onLoginButton);//注册
-
 }
 
 NetDiskClient & NetDiskClient::getInstance()
@@ -94,6 +93,7 @@ void NetDiskClient::handleLoginRes(PDU * pdu)
 		QMessageBox::information(this, "登录", LOGIN_OK);
 		//跳转用户界面
 		ClientWidget::getInstance().show();
+		ClientWidget::getInstance().setWindowTittle(m_logname);
 		//隐藏登录界面
 		this->hide();
 	}
@@ -106,6 +106,11 @@ void NetDiskClient::handleLoginRes(PDU * pdu)
 void NetDiskClient::handleOnlineUserRes(PDU * pdu)
 {
 	ClientWidget::getInstance().setOnlineUser(pdu);
+}
+
+void NetDiskClient::handleSearchUserRes(PDU * pdu)
+{
+	ClientWidget::getInstance().setSearchUserResult(pdu);
 }
 
 void NetDiskClient::buildConnected()
@@ -140,6 +145,9 @@ void NetDiskClient::onReadyRead()
 	case ENUM_MSG_TYPE_USER_ONLINE_RESPONSE:
 		handleOnlineUserRes(pdu);
 		break;
+	case ENUM_MSG_TYPE_SEARCH_USER_RESPONSE:
+		handleSearchUserRes(pdu);
+		break;
 	default:
 		break;
 	}
@@ -161,6 +169,7 @@ void NetDiskClient::onRegisterButton()
 	}
 	else
 	{
+		m_logname = username;
 		PDU* pdu = getPDU(0);
 		pdu->MsgType = ENUM_MSG_TYPE_REGIST_REQUEST;
 		memcpy(pdu->caData, username.toStdString().c_str(), 32);//拷贝信息
@@ -186,8 +195,8 @@ void NetDiskClient::onLoginButton()
 	{
 		PDU* pdu = getPDU(0);
 		pdu->MsgType = ENUM_MSG_TYPE_LOGIN_REQUEST;
-		memcpy(pdu->caData, username.toStdString().c_str(), 32);//拷贝信息
-		memcpy(pdu->caData + 32, password.toStdString().c_str(), 32);//拷贝信息
+		memcpy(pdu->caData, username.toStdString().c_str(), username.toStdString().size());//拷贝信息
+		memcpy(pdu->caData + 32, password.toStdString().c_str(), password.toStdString().size());//拷贝信息
 
 		m_tcpSkt->write((char *)pdu, pdu->PDULen);//发送数据
 		//清理内存

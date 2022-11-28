@@ -104,6 +104,42 @@ void MyTcpSocket::handleUserOnlineReq()
 	res_pdu = NULL;
 }
 
+void MyTcpSocket::handleSearchUserReq(PDU* pdu)
+{
+	char name[64] = { '\0' };
+	strncpy(name, pdu->caData, 64);
+	qDebug() << "search username is :: " << name;
+
+	//数据库查询
+	int re = OperateDB::getInstance()->SearchUser(name);
+
+	PDU* res_pdu = getPDU(0);//分配内存
+	res_pdu->MsgType = ENUM_MSG_TYPE_SEARCH_USER_RESPONSE;//返回登录回应
+	memset(res_pdu->caData, 0, 64);//清零
+	//返回数据
+	//不存在
+	if (re == -1)
+	{
+		strcpy(res_pdu->caData, SEARCH_NO_RESULT);
+	}
+	//离线
+	else if (re == 0)
+	{
+		strcpy(res_pdu->caData, SEARCH_OK_OFFLINE);
+	}
+	//在线
+	else if (re == 1)
+	{
+		strcpy(res_pdu->caData, SEARCH_OK_ONLINE);
+	}
+	
+	this->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
+
+
+	free(res_pdu);
+	res_pdu = NULL;
+}
+
 void MyTcpSocket::ReadMsg()
 {
 	qDebug() << "read size :: " << this->bytesAvailable();
@@ -128,6 +164,9 @@ void MyTcpSocket::ReadMsg()
 		break;
 	case ENUM_MSG_TYPE_USER_ONLINE_RESPONSE:
 		handleUserOnlineReq();
+		break;
+	case ENUM_MSG_TYPE_SEARCH_USER_REQUEST:
+		handleSearchUserReq(pdu);
 		break;
 	default:
 		break;

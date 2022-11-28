@@ -44,6 +44,11 @@ void ClientWidget::initConnect()
 	connect(m_setWdt, &QListWidget::currentRowChanged, m_stcWdt, &QStackedWidget::setCurrentIndex);
 }
 
+void ClientWidget::setWindowTittle(QString name)
+{
+	this->setWindowTitle(name);
+}
+
 void ClientWidget::setOnlineUser(PDU * pdu)
 {
 	if (!pdu)
@@ -51,4 +56,13 @@ void ClientWidget::setOnlineUser(PDU * pdu)
 		return;
 	}
 	m_userWdt->setOnlineUserList(pdu);
+}
+
+void ClientWidget::setSearchUserResult(PDU * pdu)
+{
+	if (!pdu)
+	{
+		return;
+	}
+	m_userWdt->setSearchUserResult(pdu);
 }

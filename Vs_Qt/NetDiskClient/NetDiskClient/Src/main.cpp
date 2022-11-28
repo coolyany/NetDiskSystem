@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	/*ClientWidget w;
 	w.show();*/
 
-	//UserWidget w;
-	//w.show();
+	/*UserWidget w;
+	w.show();*/
     return a.exec();
 }

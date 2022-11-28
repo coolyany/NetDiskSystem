@@ -11,15 +11,18 @@
 class ClientWidget : public QWidget
 {
 public:
+	ClientWidget(QWidget* parent = Q_NULLPTR);
+
 	static ClientWidget& getInstance();
 
 	void initLayout();
 	void initConnect();
+	void setWindowTittle(QString name);
 
 public:
 	void setOnlineUser(PDU* pdu);
+	void setSearchUserResult(PDU* pdu);
 private:
-	ClientWidget(QWidget* parent = Q_NULLPTR);
 
 
 	QListWidget *m_setWdt = nullptr;

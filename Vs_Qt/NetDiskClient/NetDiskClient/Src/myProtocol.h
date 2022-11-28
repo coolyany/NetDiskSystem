@@ -11,6 +11,9 @@ typedef unsigned int uint;
 #define REGISTER_FAILED		"register failed, name is existed"
 #define LOGIN_OK			"login ok"
 #define LOGIN_FAILED		"login failed"
+#define SEARCH_OK_ONLINE	"search successful, status is online"
+#define SEARCH_OK_OFFLINE	"search successful, status is offline"
+#define SEARCH_NO_RESULT	"search no result"
 
 enum ENUM_MSG_TYPE {
 	ENUM_MSG_TYPE_MIN = 0,
@@ -21,6 +24,9 @@ enum ENUM_MSG_TYPE {
 	ENUM_MSG_TYPE_LOGIN_RESPONSE,  //登录回复
 	ENUM_MSG_TYPE_USER_ONLINE_REQUEST,  //用户在线请求
 	ENUM_MSG_TYPE_USER_ONLINE_RESPONSE,  //用户在线回复
+	ENUM_MSG_TYPE_SEARCH_USER_REQUEST,  //搜索用户回复
+	ENUM_MSG_TYPE_SEARCH_USER_RESPONSE,  //搜索用户回复
+
 
 	ENUM_MSG_TYPE_MAX = 0x00ffffff
 };

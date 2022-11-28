@@ -89,6 +89,40 @@ QStringList OperateDB::GetUserOnline()
 	return userNames;
 }
 
+int OperateDB::SearchUser(const char * name)
+{
+	if (!name)
+	{
+		return -1;
+	}
+
+	char search_userinfo_sql[128] = { '\0' };
+	sprintf(search_userinfo_sql, "SELECT online FROM userInfo WHERE name='%s'", name);
+
+	QSqlQuery sql_query;
+	sql_query.exec(search_userinfo_sql);
+	//存在
+	if (sql_query.next())
+	{
+		int status = sql_query.value(0).toInt();
+		//不在线
+		if (status == 0)
+		{
+			return 0;
+		}
+		//在线
+		else if (status == 1)
+		{
+			return 1;
+		}
+	}
+	//不存在
+	else 
+	{
+		return -1;
+	}
+}
+
 void OperateDB::setOffline(const char * name)
 {
 	if (!name) {

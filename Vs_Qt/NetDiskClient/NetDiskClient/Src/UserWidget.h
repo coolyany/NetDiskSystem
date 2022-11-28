@@ -16,10 +16,18 @@ public:
 
 	void initLayout();//界面布局
 	void initConnect();
+	void clearUserList();//清空显示的用户列表
 
 	void setOnlineUserList(PDU* pdu);
+	void setSearchUserResult(PDU* pdu);
 public:
 	void onShowOnlineList();
+	void onShowSearchUser();
+	void onClickedUsersListItem(QListWidgetItem *item);
+	void onClickAddFrien();//添加好友
+
+protected:
+	bool eventFilter(QObject* watched, QEvent* event) override;
 private:
 	QTextEdit* m_showMsgTE = nullptr;
 	QLineEdit* m_sendMsgLE = nullptr;
@@ -33,4 +41,7 @@ private:
 	QPushButton* m_privateChatPB = nullptr;
 	QPushButton* m_sendMsgPB = nullptr;
 
+	QListWidgetItem* m_curUserItem = nullptr;
+
+	QString m_inputName;
 };

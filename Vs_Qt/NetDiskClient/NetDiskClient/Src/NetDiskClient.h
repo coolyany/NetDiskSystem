@@ -21,6 +21,7 @@ public:
 	void handleRegisterRes(PDU* pdu);//处理服务端注册回应
 	void handleLoginRes(PDU* pdu);//处理服务端登录回应
 	void handleOnlineUserRes(PDU* pdu);//处理服务端在下用户回应
+	void handleSearchUserRes(PDU* pdu);
 //槽函数
 public:
 	void buildConnected();
@@ -44,4 +45,6 @@ private:
 
 	QTcpSocket* m_tcpSkt = nullptr;
 	//ClientWidget* m_clienWdt = nullptr;
+
+	QString m_logname;
 };
