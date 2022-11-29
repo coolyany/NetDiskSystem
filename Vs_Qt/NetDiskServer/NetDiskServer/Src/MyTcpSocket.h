@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <QTcpSocket>
+#include <QVariant>
 #include "myProtocol.h"
 #include "OperateDB.h"
 
@@ -18,12 +19,14 @@ public:
 	void handleAddUserReq(PDU* pdu);//处理添加用户的请求
 
 	inline QString getClientName() { return m_username; }
+	bool isLocalName(QString name);
 //槽函数
 public:
 	void ReadMsg();
 
 signals:
 	void disConnectedSign(qintptr socketDescriptor);
+	void broadcastAddFriend(QString, QString);//广播添加好友通知
 private:
 	QString m_username;
 };

@@ -7,13 +7,18 @@
 
 typedef unsigned int uint;
 
-#define REGISTER_OK			"register ok"
-#define REGISTER_FAILED		"register failed, name is existed"
-#define LOGIN_OK			"login ok"
-#define LOGIN_FAILED		"login failed"
-#define SEARCH_OK_ONLINE	"search successful, status is online"
-#define SEARCH_OK_OFFLINE	"search successful, status is offline"
-#define SEARCH_NO_RESULT	"search no result"
+#define REGISTER_OK						"register ok"
+#define REGISTER_FAILED					"register failed, name is existed"
+#define LOGIN_OK						"login ok"
+#define LOGIN_FAILED					"login failed"
+#define SEARCH_OK_ONLINE				"search successful, status is online"
+#define SEARCH_OK_OFFLINE				"search successful, status is offline"
+#define SEARCH_NO_RESULT				"search no result"
+#define ADD_FRIEND_ERROR				"add friend error"
+#define ADD_FRIEND_IS_EXIST				"add friend,friend is exist"
+#define ADD_FRIEND_USER_ONLINE			"add friend,user is online"
+#define ADD_FRIEND_USER_OFFLINE			"add friend,user is offline"
+
 
 enum ENUM_MSG_TYPE {
 	ENUM_MSG_TYPE_MIN = 0,

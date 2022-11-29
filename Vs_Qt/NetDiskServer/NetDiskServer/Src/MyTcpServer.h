@@ -11,6 +11,7 @@ public:
 	static MyTcpServer* getInstance();
 
 	void disConnectOneSocket(qintptr socketDescriptor);
+	void broadcastAddUserRes(QString friendName, QString localName);
 protected:
 	void incomingConnection(qintptr socketDescriptor) override;
 

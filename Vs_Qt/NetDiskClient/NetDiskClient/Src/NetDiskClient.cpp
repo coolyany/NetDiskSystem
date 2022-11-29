@@ -115,6 +115,56 @@ void NetDiskClient::handleSearchUserRes(PDU * pdu)
 	ClientWidget::getInstance().setSearchUserResult(pdu);
 }
 
+void NetDiskClient::handleAddUserRes(PDU * pdu)
+{
+	char type[32] = { '\0' };
+	char localName[16] = { '\0' };
+	char friendName[16] = { '\0' };
+
+	strcpy(type, pdu->caData);
+	strcpy(localName, pdu->caData + 32);
+	strcpy(friendName, pdu->caData + 48);
+
+
+	qDebug() << "add friend res name :: " << friendName << "local name :: " << localName << " type :: " << type;
+	//添加好友错误，发送方为本客户端时
+	if ((strcmp(type, ADD_FRIEND_ERROR) == 0) && QString(localName) == m_logname)
+	{
+		QMessageBox::critical(this, "添加好友", "遇到错误，退出!!!");
+	}
+	//好友已存在，发送方为本客户端时
+	else if ((strcmp(type, ADD_FRIEND_IS_EXIST) == 0) && QString(localName) == m_logname)
+	{
+		QMessageBox::warning(this, "添加好友", "好友已存在");
+	}
+	//在线，发送方为本客户端时
+	else if ((strcmp(type, ADD_FRIEND_USER_ONLINE) == 0) && QString(localName) == m_logname)
+	{
+		QMessageBox::information(this, "添加好友", "发送申请成功,等待对方同意");
+	}
+	//在线，且为接收方时
+	else if ((strcmp(type, ADD_FRIEND_USER_ONLINE) == 0) && QString(friendName) == m_logname)
+	{
+		int re = QMessageBox::information(this, "添加好友",
+			QString("%1想添加你为好友，是否同意：").arg(localName),
+			QMessageBox::Yes, QMessageBox::No);
+		if (re == QMessageBox::Yes)
+		{
+			qDebug() << "yes";
+		}
+		if (re == QMessageBox::No)
+		{
+			qDebug() << "no";
+		}
+	}
+	//离线，发送方为本客户端时
+	else if ((strcmp(type, ADD_FRIEND_USER_OFFLINE) == 0) && QString(localName) == m_logname)
+	{
+		QMessageBox::information(this, "添加好友", "用户处于离线状态，申请已发送");
+	}
+
+}
+
 void NetDiskClient::buildConnected()
 {
 	printf("connect successful\n");
@@ -149,6 +199,9 @@ void NetDiskClient::onReadyRead()
 		break;
 	case ENUM_MSG_TYPE_SEARCH_USER_RESPONSE:
 		handleSearchUserRes(pdu);
+		break;
+	case ENUM_MSG_TYPE_ADD_USER_RESPONSE:
+		handleAddUserRes(pdu);
 		break;
 	default:
 		break;

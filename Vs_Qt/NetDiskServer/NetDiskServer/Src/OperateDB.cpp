@@ -131,19 +131,40 @@ int OperateDB::AddUser(const char * friendName, const char * localName)
 	}
 	char add_userFriendInfo_sql[256] = { '\0' };
 	sprintf(add_userFriendInfo_sql, "select * from userFriendInfo "
-		"where id=(select id from userInfo where name=%s)"
-		"and friendId=(select id from userInfo where name=%s)"
-		"or where id=(select id from userInfo where name=%s)"
-		"and friendId=(select id from userInfo where name=%s)", friendName, localName, localName, friendName);
-
+		"where (id=(select id from userInfo where name='%s') "
+		"and friendId=(select id from userInfo where name='%s')) "
+		"or (id=(select id from userInfo where name='%s') "
+		"and friendId=(select id from userInfo where name='%s'))", friendName, localName, localName, friendName);
+	printf("sql :: %s", add_userFriendInfo_sql);
 	QSqlQuery query;
 	query.exec(add_userFriendInfo_sql);
+	//好友存在
 	if (query.next()) {
-		qDebug() << "add users value ::	" << query.value(0).toString();
+		qDebug() << "add users value ::	" << query.value(0).toString() << "|" << query.value(1).toString();
+		return 2;
+	}
+	//好友不存在
+	else
+	{
+		char find_userInfo_sql[128] = { '\0' };
+		sprintf(find_userInfo_sql, "SELECT online FROM userInfo WHERE name='%s'", friendName);
+		printf("sql :: %s", find_userInfo_sql);
+		//查询用户是否在线
+		QSqlQuery sql_query;
+		sql_query.exec(find_userInfo_sql);
+		if (sql_query.next()) 
+		{
+			qDebug() << "friend online :: " << sql_query.value(0).toInt();
+			return  sql_query.value(0).toInt();
+		}
+		else
+		{
+			return -1;
+		}
 	}
 
 
-	return 0;
+	return -1;
 }
 
 void OperateDB::setOffline(const char * name)

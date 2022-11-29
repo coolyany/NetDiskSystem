@@ -2,4 +2,11 @@
     <qresource prefix="/config">
         <file>client.ini</file>
     </qresource>
+    <qresource prefix="/icon">
+        <file>icon/close.png</file>
+        <file>icon/max.png</file>
+        <file>icon/min.png</file>
+        <file>icon/min2max.png</file>
+        <file>icon/title.png</file>
+    </qresource>
 </RCC>

@@ -87,8 +87,9 @@
   <ItemGroup>
     <ClCompile Include="Src\BookWidget.cpp" />
     <ClCompile Include="Src\ClientWidget.cpp" />
-    <ClCompile Include="Src\ClientWidget.h" />
+    <QtMoc Include="Src\ClientWidget.h" />
     <ClCompile Include="Src\myProtocol.cpp" />
+    <ClCompile Include="Src\MyTItleBar.cpp" />
     <ClCompile Include="Src\QReadIni.cpp" />
     <ClCompile Include="Src\UserWidget.cpp" />
     <QtRcc Include="NetDiskClient.qrc" />
@@ -100,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="Src\BookWidget.h" />
     <ClInclude Include="Src\myProtocol.h" />
+    <QtMoc Include="Src\MyTitleBar.h" />
     <ClInclude Include="Src\QReadIni.h" />
     <ClInclude Include="Src\UserWidget.h" />
   </ItemGroup>

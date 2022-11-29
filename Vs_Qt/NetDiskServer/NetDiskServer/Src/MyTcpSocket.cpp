@@ -142,16 +142,61 @@ void MyTcpSocket::handleSearchUserReq(PDU* pdu)
 
 void MyTcpSocket::handleAddUserReq(PDU * pdu)
 {
+	//char friendName[32] = { '\0' };
+	//char localName[32] = { '\0' };
+
+	//strncpy(friendName, pdu->caData, 32);
+	//strncpy(localName, pdu->caData + 32, 32);
+
+	//qDebug() << "add friend name is :: " << friendName;
+	//qDebug() << "add local name is :: " << localName;
+
+	//int re = OperateDB::getInstance()->AddUser(friendName, localName);
+
+	//PDU* res_pdu = getPDU(0);//分配内存
+	//res_pdu->MsgType = ENUM_MSG_TYPE_ADD_USER_RESPONSE;//返回添加用户回应
+	//memset(res_pdu->caData, 0, 64);//清零
+	////错误
+	//if (re == -1)
+	//{
+	//	strcpy(res_pdu->caData, ADD_FRIEND_ERROR);
+	//}
+	////下线
+	//else if (re == 0)
+	//{
+	//	strcpy(res_pdu->caData, ADD_FRIEND_USER_OFFLINE);
+
+	//}
+	////在线
+	//else if (re == 1)
+	//{
+	//	strcpy(res_pdu->caData, ADD_FRIEND_USER_ONLINE);
+
+	//}
+	////好友存在
+	//else if(re == 2)
+	//{
+	//	strcpy(res_pdu->caData, ADD_FRIEND_IS_EXIST);
+	//}
+	//strcpy(res_pdu->caData + 32, friendName);//需要添加的好友名
+	//this->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
+
+	//free(res_pdu);
+	//res_pdu = NULL;
+
+
 	char friendName[32] = { '\0' };
 	char localName[32] = { '\0' };
 
 	strncpy(friendName, pdu->caData, 32);
 	strncpy(localName, pdu->caData + 32, 32);
 
-	qDebug() << "add friend name is :: " << friendName;
-	qDebug() << "add local name is :: " << localName;
+	emit broadcastAddFriend(QString(friendName), QString(localName));
+}
 
-	int re = OperateDB::getInstance()->AddUser(friendName, localName);
+bool MyTcpSocket::isLocalName(QString name)
+{
+	return name == m_username ? true : false;
 }
 
 void MyTcpSocket::ReadMsg()

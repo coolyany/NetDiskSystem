@@ -8,9 +8,11 @@
 
 #include "UserWidget.h"
 #include "BookWidget.h"
+#include "MyTitleBar.h"
 
 class ClientWidget : public QWidget
 {
+	Q_OBJECT
 public:
 	ClientWidget(QWidget* parent = Q_NULLPTR);
 
@@ -23,8 +25,18 @@ public:
 public:
 	void setOnlineUser(PDU* pdu);
 	void setSearchUserResult(PDU* pdu);
-private:
 
+	void loadStyleSheet(const QString &sheetName);
+
+public slots:
+	void onButtonMinClicked();
+	void onButtonRestoreClicked();
+	void onButtonMaxClicked();
+	void onButtonCloseClicked();
+protected:
+	void paintEvent(QPaintEvent *event) override;
+	bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
+private:
 
 	QListWidget *m_setWdt = nullptr;
 
@@ -32,4 +44,7 @@ private:
 	BookWidget* m_bookWdt = nullptr;
 	QStackedWidget* m_stcWdt = nullptr;
 	QStatusBar* m_statusBar = nullptr;
+	MyTitleBar* m_titleBar = nullptr;
+
+	int m_nBorderWidth;
 };
