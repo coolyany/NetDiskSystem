@@ -59,6 +59,7 @@ void UserWidget::initConnect()
 	connect(m_findUserPB, &QPushButton::clicked, this, &UserWidget::onShowSearchUser);
 	connect(m_userList, &QListWidget::currentRowChanged, this, &UserWidget::onClickedUsersListItem);
 	connect(m_addFriendPB, &QPushButton::clicked, this, &UserWidget::onClickAddFriend);
+	connect(m_showFriendListPB, &QPushButton::clicked, this, &UserWidget::onShowFriendList);
 }
 
 void UserWidget::clearUserList()
@@ -88,18 +89,42 @@ void UserWidget::setSearchUserResult(PDU * pdu)
 	//搜索成功且在线
 	if (strcmp(pdu->caData, SEARCH_OK_ONLINE) == 0)
 	{
-		m_userList->addItem(QString("%1,在线").arg(m_searchName));
+		QListWidgetItem *item = new QListWidgetItem(QIcon(":/icon/icon/online.png"), m_searchName, this->m_userList);
+		item->setToolTip("在线");
+		m_userList->addItem(item);
 	}
 	//搜索成功但没在线
 	else if (strcmp(pdu->caData, SEARCH_OK_OFFLINE) == 0)
 	{
-		m_userList->addItem(QString("%1,下线").arg(m_searchName));
-
+		QListWidgetItem *item = new QListWidgetItem(QIcon(":/icon/icon/offline.png"), m_searchName, this->m_userList);
+		item->setToolTip("离线");
+		m_userList->addItem(item);
+		//m_userList->addItem(QString("%1,下线").arg(m_searchName));
 	}
 	//搜索无结果
 	else if (strcmp(pdu->caData, SEARCH_NO_RESULT) == 0)
 	{
 		QMessageBox::warning(this, "查询用户", "无结果");
+	}
+}
+
+void UserWidget::setFriendList(PDU * pdu)
+{
+	//清空用户显示列表
+	clearUserList();
+	//获取user个数
+	uint userNum = pdu->MsgLen / 32;
+	char usrDst[32] = { '\0' };
+	for (uint i = 0; i < userNum; i++)
+	{
+		memcpy(usrDst, (char*)(pdu->caMsg) + i * 32, 32);
+		QString str(usrDst);
+		QString name = str.split(',').at(0);
+		QString status = str.split(',').at(1) == '1' ? "在线" : "离线";
+		QString statusIcon = str.split(',').at(1) == '1' ? ":/icon/icon/online.png" : ":/icon/icon/offline.png";
+		QListWidgetItem *item = new QListWidgetItem(QIcon(statusIcon), name, this->m_userList);
+		item->setToolTip(status);
+		this->m_userList->addItem(item);
 	}
 }
 
@@ -189,6 +214,18 @@ void UserWidget::onClickAddFriend()
 	pdu = NULL;
 
 	
+}
+void UserWidget::onShowFriendList()
+{
+	PDU* pdu = getPDU(0);
+	pdu->MsgType = ENUM_MSG_TYPE_REFRESH_FRIEND_LIST_REQUEST;//刷新好友列表请求
+	memset(pdu->caData, 0, 64);
+	memcpy(pdu->caData, m_localName.toStdString().c_str(), m_localName.toStdString().size());//登录的客户端名字
+
+	NetDiskClient::getInstance().getTcpSocket()->write((char *)pdu, pdu->PDULen);//发送数据
+	//清理内存
+	free(pdu);
+	pdu = NULL;
 }
 //
 //bool UserWidget::eventFilter(QObject * watched, QEvent * event)

@@ -8,5 +8,7 @@
         <file>icon/min.png</file>
         <file>icon/min2max.png</file>
         <file>icon/title.png</file>
+        <file>icon/offline.png</file>
+        <file>icon/online.png</file>
     </qresource>
 </RCC>

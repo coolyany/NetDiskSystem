@@ -214,8 +214,31 @@ void MyTcpSocket::handleAgreeAddUserRes(PDU* pdu)
 	else
 	{
 		qDebug() << "agree add friend failed";
-
 	}
+}
+
+void MyTcpSocket::handleRefreshFriendListRes(PDU* pdu)
+{
+	char name[64] = { '\0' };
+	strncpy(name, pdu->caData, 64);
+	qDebug() << "search username is :: " << name;
+
+	QStringList friendList =  OperateDB::getInstance()->GetFriendList(name);
+
+	PDU* res_pdu = getPDU(friendList.size() * 32);//分配好友列表信息内存
+	res_pdu->MsgType = ENUM_MSG_TYPE_REFRESH_FRIEND_LIST_RESPONSE;//返回好友列表回应
+	memset(res_pdu->caData, 0, 64);//清零
+
+	for (size_t i = 0; i < friendList.size(); i++)
+	{
+		memcpy((char*)(res_pdu->caMsg) + 32 * i,
+			friendList.at(i).toStdString().c_str(),
+			friendList.at(i).size());
+	}
+
+	this->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
+	free(res_pdu);
+	res_pdu = NULL;
 }
 
 bool MyTcpSocket::isLocalName(QString name)
@@ -256,6 +279,9 @@ void MyTcpSocket::ReadMsg()
 		break;
 	case ENUM_MSG_TYPE_AGREE_ADD_USER_RESPONSE:
 		handleAgreeAddUserRes(pdu);
+		break;
+	case ENUM_MSG_TYPE_REFRESH_FRIEND_LIST_REQUEST:
+		handleRefreshFriendListRes(pdu);
 		break;
 	default:
 		break;

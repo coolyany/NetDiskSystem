@@ -6,7 +6,6 @@
 #include <QListWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-
 #include "myProtocol.h"
 
 class UserWidget : public QWidget
@@ -20,12 +19,14 @@ public:
 
 	void setOnlineUserList(PDU* pdu);
 	void setSearchUserResult(PDU* pdu);
+	void setFriendList(PDU* pdu);
 	inline void setLocalName(QString name) { m_localName = name; }
 public:
 	void onShowOnlineList();
 	void onShowSearchUser();
 	void onClickedUsersListItem(int currentRow);
 	void onClickAddFriend();//添加好友
+	void onShowFriendList();//显示好友列表
 
 protected:
 	//bool eventFilter(QObject* watched, QEvent* event) override;

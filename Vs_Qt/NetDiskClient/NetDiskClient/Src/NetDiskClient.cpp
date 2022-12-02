@@ -180,6 +180,11 @@ void NetDiskClient::handleAddUserRes(PDU * pdu)
 
 }
 
+void NetDiskClient::handleShowFriendList(PDU * pdu)
+{
+	ClientWidget::getInstance().setFriendList(pdu);
+}
+
 void NetDiskClient::buildConnected()
 {
 	printf("connect successful\n");
@@ -217,6 +222,9 @@ void NetDiskClient::onReadyRead()
 		break;
 	case ENUM_MSG_TYPE_ADD_USER_RESPONSE:
 		handleAddUserRes(pdu);
+		break;
+	case ENUM_MSG_TYPE_REFRESH_FRIEND_LIST_RESPONSE:
+		handleShowFriendList(pdu);
 		break;
 	default:
 		break;

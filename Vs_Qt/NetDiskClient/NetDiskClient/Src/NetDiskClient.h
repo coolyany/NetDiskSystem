@@ -23,6 +23,7 @@ public:
 	void handleOnlineUserRes(PDU* pdu);//处理服务端在下用户回应
 	void handleSearchUserRes(PDU* pdu);//处理搜索好友回应
 	void handleAddUserRes(PDU* pdu);//处理添加好友的回应
+	void handleShowFriendList(PDU* pdu);//处理展示好友界面的回应
 //槽函数
 public:
 	void buildConnected();

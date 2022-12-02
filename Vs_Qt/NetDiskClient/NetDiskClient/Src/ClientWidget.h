@@ -25,6 +25,7 @@ public:
 public:
 	void setOnlineUser(PDU* pdu);
 	void setSearchUserResult(PDU* pdu);
+	void setFriendList(PDU* pdu);
 
 	void loadStyleSheet(const QString &sheetName);
 

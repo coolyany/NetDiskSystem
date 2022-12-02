@@ -204,6 +204,57 @@ bool OperateDB::AgreeAddUser(const char* friendName, const char* localName)
 
 }
 
+QStringList OperateDB::GetFriendList(const char* name)
+{
+	QStringList friendList;
+	friendList.clear();
+
+	//在userFriendInfo表中找到所有好友的id
+	QVector<int> friendIds;
+	friendIds.clear();
+	char sql_str[128] = { '\0' };
+	sprintf(sql_str, "SELECT id FROM userFriendInfo WHERE friendId=(SELECT id FROM userInfo WHERE name='%s')", name);
+	QSqlQuery sql;
+	if (!sql.exec(sql_str)) {
+		printf("select id from userFriendInfo error");
+		return friendList;
+	}
+	while (sql.next())
+	{
+		friendIds.push_back(sql.value(0).toInt());
+	}
+
+	memset(sql_str, 0, 128);
+	sql.clear();
+	sprintf(sql_str, "SELECT friendId FROM userFriendInfo WHERE id=(SELECT id FROM userInfo WHERE name='%s')", name);
+	if (!sql.exec(sql_str)) {
+		printf("select id from userFriendInfo error");
+		return friendList;
+	}
+	while (sql.next())
+	{
+		friendIds.push_back(sql.value(0).toInt());
+	}
+
+	//在userInfo表中找name
+	for (int id : friendIds) 
+	{
+		memset(sql_str, 0, 128);
+		sql.clear();
+		sprintf(sql_str, "SELECT name,online FROM userInfo WHERE id=%d", id);
+		if (!sql.exec(sql_str)) {
+			printf("get friend name error");
+			return friendList;
+		}
+		if (sql.next())
+		{
+			friendList.append(sql.value(0).toString() + "," + sql.value(1).toString());
+		}
+	}
+
+	return friendList;
+}
+
 void OperateDB::setOffline(const char * name)
 {
 	if (!name) {
