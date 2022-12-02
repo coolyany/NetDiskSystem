@@ -17,6 +17,8 @@ public:
 	void handleUserOnlineReq();//处理用户在线请求
 	void handleSearchUserReq(PDU* pdu);//处理搜索用户请求
 	void handleAddUserReq(PDU* pdu);//处理添加用户的请求
+	void handleAgreeAddUserRes(PDU* pdu);//处理同意添加好友回复
+
 
 	inline QString getClientName() { return m_username; }
 	bool isLocalName(QString name);

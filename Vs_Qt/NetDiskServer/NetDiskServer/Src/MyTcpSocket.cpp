@@ -194,6 +194,30 @@ void MyTcpSocket::handleAddUserReq(PDU * pdu)
 	emit broadcastAddFriend(QString(friendName), QString(localName));
 }
 
+void MyTcpSocket::handleAgreeAddUserRes(PDU* pdu)
+{
+	char localName[32] = { '\0' };
+	char friendName[32] = { '\0' };
+
+	strncpy(friendName, pdu->caData, 32);
+	strncpy(localName, pdu->caData + 32, 32);
+
+	qDebug() << "search username is :: " << friendName;
+	qDebug() << "search username is :: " << localName;
+
+
+	int re = OperateDB::getInstance()->AgreeAddUser(friendName, localName);
+	if (re)
+	{
+		qDebug() << "agree add friend successful";
+	}
+	else
+	{
+		qDebug() << "agree add friend failed";
+
+	}
+}
+
 bool MyTcpSocket::isLocalName(QString name)
 {
 	return name == m_username ? true : false;
@@ -229,6 +253,9 @@ void MyTcpSocket::ReadMsg()
 		break;
 	case ENUM_MSG_TYPE_ADD_USER_REQUEST:
 		handleAddUserReq(pdu);
+		break;
+	case ENUM_MSG_TYPE_AGREE_ADD_USER_RESPONSE:
+		handleAgreeAddUserRes(pdu);
 		break;
 	default:
 		break;

@@ -64,7 +64,8 @@ void MyTcpServer::broadcastAddUserRes(QString friendName, QString localName)
 	strcpy(res_pdu->caData + 48, friendName.toStdString().c_str());//接收方的名字
 
 	//广播发送给每个客户端
-	for (auto item : m_tcpSockets) {
+	for (auto item : m_tcpSockets) 
+	{
 		item->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
 	}
 

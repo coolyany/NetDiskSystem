@@ -167,6 +167,43 @@ int OperateDB::AddUser(const char * friendName, const char * localName)
 	return -1;
 }
 
+bool OperateDB::AgreeAddUser(const char* friendName, const char* localName)
+{
+	/*char sql_str[128] = { '\0' };
+	sprintf(sql_str, "INSERT INTO userFriendInfo (id, friendId) VALUES ((select id from userInfo where name='%s')," 
+		"(select id from userInfo where name='%s'))", localName, friendName);
+
+	qDebug() << "sql :: " << sql_str;
+	QSqlQuery sql_query;
+	return sql_query.exec(sql_str);*/
+
+	char select_id_userInfo_sql[64] = { '\0' };
+	//char select_local_userInfo_sql[64] = { '\0' };
+	char insert_userFriendInfo_sql[64] = { '\0' };
+	sprintf(select_id_userInfo_sql, "SELECT id FROM userInfo WHERE (name='%s') or (name='%s')", localName, friendName);
+
+	QSqlQuery sql_select;
+	int re = sql_select.exec(select_id_userInfo_sql);
+	if (!re)
+	{
+		return false;
+	}
+	int idBuf[2];
+	int i = 0;
+	while (sql_select.next())
+	{
+		idBuf[i] = sql_select.value(0).toInt();
+		i++;
+	}
+
+	sprintf(insert_userFriendInfo_sql, "INSERT INTO userFriendInfo  (id,friendId) VALUES (%d, %d)", idBuf[0], idBuf[1]);
+
+	qDebug() << "add friend sql :: " << insert_userFriendInfo_sql;
+	QSqlQuery sql_insert;
+	return sql_insert.exec(insert_userFriendInfo_sql);
+
+}
+
 void OperateDB::setOffline(const char * name)
 {
 	if (!name) {

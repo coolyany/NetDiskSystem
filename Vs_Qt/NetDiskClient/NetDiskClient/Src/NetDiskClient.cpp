@@ -148,14 +148,29 @@ void NetDiskClient::handleAddUserRes(PDU * pdu)
 		int re = QMessageBox::information(this, "添加好友",
 			QString("%1想添加你为好友，是否同意：").arg(localName),
 			QMessageBox::Yes, QMessageBox::No);
+		
+		PDU* res_pdu = getPDU(0);//分配内存
+		memset(res_pdu->caData, 0, 64);//清零
+		
 		if (re == QMessageBox::Yes)
 		{
 			qDebug() << "yes";
+			res_pdu->MsgType = ENUM_MSG_TYPE_AGREE_ADD_USER_RESPONSE;//返回同意添加用户回应
+			//strcpy(pdu->caData, friendName);
+			//strcpy(pdu->caData + 32, localName);
+			memcpy(res_pdu->caData, friendName, strlen(friendName) + 1);
+			memcpy(res_pdu->caData + 32, localName, strlen(localName) + 1);
+
+
+			m_tcpSkt->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
+			free(res_pdu);
+			res_pdu = NULL;
 		}
 		if (re == QMessageBox::No)
 		{
 			qDebug() << "no";
 		}
+		
 	}
 	//离线，发送方为本客户端时
 	else if ((strcmp(type, ADD_FRIEND_USER_OFFLINE) == 0) && QString(localName) == m_logname)
