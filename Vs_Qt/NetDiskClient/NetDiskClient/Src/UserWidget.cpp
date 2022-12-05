@@ -60,6 +60,7 @@ void UserWidget::initConnect()
 	connect(m_userList, &QListWidget::currentRowChanged, this, &UserWidget::onClickedUsersListItem);
 	connect(m_addFriendPB, &QPushButton::clicked, this, &UserWidget::onClickAddFriend);
 	connect(m_showFriendListPB, &QPushButton::clicked, this, &UserWidget::onShowFriendList);
+	connect(m_delFriendPB, &QPushButton::clicked, this, &UserWidget::onDelFriend);
 }
 
 void UserWidget::clearUserList()
@@ -77,7 +78,9 @@ void UserWidget::setOnlineUserList(PDU * pdu)
 	for (uint i = 0; i < userNum; i++)
 	{
 		memcpy(usrDst, (char*)(pdu->caMsg) + i * 32, 32);
-		this->m_userList->addItem(usrDst);
+		QListWidgetItem *item = new QListWidgetItem(QIcon(":/icon/icon/online.png"), usrDst, this->m_userList);
+		item->setToolTip("在线");
+		this->m_userList->addItem(item);
 	}
 }
 
@@ -126,6 +129,20 @@ void UserWidget::setFriendList(PDU * pdu)
 		item->setToolTip(status);
 		this->m_userList->addItem(item);
 	}
+}
+
+void UserWidget::setDelFriendList(PDU * pdu)
+{
+	if (strcmp(pdu->caData, DEL_FRIEND_OK) == 0)
+	{
+		QMessageBox::information(this, "删除好友", DEL_FRIEND_OK);
+	}
+	else if(strcmp(pdu->caData, DEL_FRIEND_FAILED) == 0)
+	{
+		QMessageBox::warning(this, "删除好友", DEL_FRIEND_FAILED);
+	}
+
+	onShowFriendList();
 }
 
 void UserWidget::onShowOnlineList()
@@ -221,6 +238,28 @@ void UserWidget::onShowFriendList()
 	pdu->MsgType = ENUM_MSG_TYPE_REFRESH_FRIEND_LIST_REQUEST;//刷新好友列表请求
 	memset(pdu->caData, 0, 64);
 	memcpy(pdu->caData, m_localName.toStdString().c_str(), m_localName.toStdString().size());//登录的客户端名字
+
+	NetDiskClient::getInstance().getTcpSocket()->write((char *)pdu, pdu->PDULen);//发送数据
+	//清理内存
+	free(pdu);
+	pdu = NULL;
+}
+void UserWidget::onDelFriend()
+{
+	QListWidgetItem* curItem = m_userList->currentItem();
+	if (!curItem)
+	{
+		QMessageBox::warning(this, "添加好友", "请先选择好友。");
+		return;
+	}
+	QString friendName = curItem->text();
+
+	PDU* pdu = getPDU(0);
+	pdu->MsgType = ENUM_MSG_TYPE_DELETE_FRIEND_REQUEST;//添加用户请求
+	memset(pdu->caData, 0, 64);
+	//strcpy(pdu->caData, friendName.toStdString().c_str());
+	memcpy(pdu->caData, friendName.toStdString().c_str(), friendName.toStdString().size());//需要删除的好友名字
+	memcpy(pdu->caData + 32, m_localName.toStdString().c_str(), m_localName.toStdString().size());//登录的客户端名字
 
 	NetDiskClient::getInstance().getTcpSocket()->write((char *)pdu, pdu->PDULen);//发送数据
 	//清理内存

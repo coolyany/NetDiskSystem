@@ -19,6 +19,7 @@ public:
 	void handleAddUserReq(PDU* pdu);//处理添加用户的请求
 	void handleAgreeAddUserRes(PDU* pdu);//处理同意添加好友回复
 	void handleRefreshFriendListRes(PDU* pdu);//处理刷新好友列表请求
+	void handleDelFriendRes(PDU* pdu);//删除好友请求
 
 	inline QString getClientName() { return m_username; }
 	bool isLocalName(QString name);

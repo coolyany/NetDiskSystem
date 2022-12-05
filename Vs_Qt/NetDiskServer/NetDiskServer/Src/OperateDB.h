@@ -19,6 +19,7 @@ public:
 	int AddUser(const char* friendName, const char* localName);//添加好友请求 -1表示错误 0表示离线 1表示在线 2表示好友存在
 	bool AgreeAddUser(const char* friendName, const char* localName);//同意添加好友回复
 	QStringList GetFriendList(const char* name);//获取好友列表
+	bool DelFriend(const char* friendName, const char* localName);//删除好友
 
 
 	void setOffline(const char* name);

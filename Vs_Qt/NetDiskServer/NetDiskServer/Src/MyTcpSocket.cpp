@@ -241,6 +241,35 @@ void MyTcpSocket::handleRefreshFriendListRes(PDU* pdu)
 	res_pdu = NULL;
 }
 
+void MyTcpSocket::handleDelFriendRes(PDU * pdu)
+{
+	char friendName[32] = { '\0' };
+	char localName[32] = { '\0' };
+
+	strncpy(friendName, pdu->caData, 32);
+	strncpy(localName, pdu->caData + 32, 32);
+
+	PDU* res_pdu = getPDU(0);//分配内存
+	res_pdu->MsgType = ENUM_MSG_TYPE_DELETE_FRIEND_RESPONSE;//返回登录回应
+	memset(res_pdu->caData, 0, 64);//清零
+
+	int re =OperateDB::getInstance()->DelFriend(friendName, localName);
+	if (re)
+	{
+		strcpy(res_pdu->caData, DEL_FRIEND_OK);
+		//memcpy(res_pdu->caData, DEL_FRIEND_OK, strlen(DEL_FRIEND_OK) + 1);
+		//memcpy(res_pdu->caData + 32, friendName, strlen(friendName) + 1);
+	}
+	else
+	{
+		strcpy(res_pdu->caData, DEL_FRIEND_FAILED);
+	}
+
+	this->write(reinterpret_cast<char *>(res_pdu), res_pdu->PDULen);
+	free(res_pdu);
+	res_pdu = NULL;
+}
+
 bool MyTcpSocket::isLocalName(QString name)
 {
 	return name == m_username ? true : false;
@@ -282,6 +311,9 @@ void MyTcpSocket::ReadMsg()
 		break;
 	case ENUM_MSG_TYPE_REFRESH_FRIEND_LIST_REQUEST:
 		handleRefreshFriendListRes(pdu);
+		break;
+	case ENUM_MSG_TYPE_DELETE_FRIEND_REQUEST:
+		handleDelFriendRes(pdu);
 		break;
 	default:
 		break;

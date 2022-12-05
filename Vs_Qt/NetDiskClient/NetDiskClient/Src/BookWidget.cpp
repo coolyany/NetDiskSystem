@@ -3,5 +3,5 @@
 BookWidget::BookWidget(QWidget * parent)
 	:QWidget(parent)
 {
-
+	
 }

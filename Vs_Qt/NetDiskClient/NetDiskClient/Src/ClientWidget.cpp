@@ -152,6 +152,15 @@ void ClientWidget::setFriendList(PDU * pdu)
 	m_userWdt->setFriendList(pdu);
 }
 
+void ClientWidget::setDelFriendList(PDU * pdu)
+{
+	if (!pdu)
+	{
+		return;
+	}
+	m_userWdt->setDelFriendList(pdu);
+}
+
 //nativeEvent主要用于进程间通信-消息传递，使用这种方式后来实现窗体的缩放 [加上了这函数，窗口也能移动了]
 bool ClientWidget::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {

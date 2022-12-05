@@ -21,12 +21,14 @@ public:
 	void setSearchUserResult(PDU* pdu);
 	void setFriendList(PDU* pdu);
 	inline void setLocalName(QString name) { m_localName = name; }
+	void setDelFriendList(PDU* pdu);
 public:
 	void onShowOnlineList();
 	void onShowSearchUser();
 	void onClickedUsersListItem(int currentRow);
 	void onClickAddFriend();//添加好友
 	void onShowFriendList();//显示好友列表
+	void onDelFriend();//删除好友
 
 protected:
 	//bool eventFilter(QObject* watched, QEvent* event) override;

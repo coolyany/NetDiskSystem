@@ -255,6 +255,24 @@ QStringList OperateDB::GetFriendList(const char* name)
 	return friendList;
 }
 
+bool OperateDB::DelFriend(const char * friendName, const char * localName)
+{
+	if (!friendName || !localName)
+	{
+		printf("delete friend DB, firendName or localName is NULL\n");
+		return false;
+	}
+	char del_userFriendInfo_sql[256] = { '\0' };
+	sprintf(del_userFriendInfo_sql, "DELETE FROM userFriendInfo "
+		"WHERE (id=(SELECT id FROM userInfo WHERE name='%s') "
+		"AND friendId=(SELECT id FROM userInfo WHERE name='%s')) "
+		"OR (id=(SELECT id FROM userInfo WHERE name='%s') "
+		"AND friendId=(SELECT id FROM userInfo WHERE name='%s'))", friendName, localName, localName, friendName);
+	printf("del friend sql str :: %s", del_userFriendInfo_sql);
+	QSqlQuery query;
+	return query.exec(del_userFriendInfo_sql);
+}
+
 void OperateDB::setOffline(const char * name)
 {
 	if (!name) {
